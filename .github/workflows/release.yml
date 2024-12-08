@@ -95,7 +95,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
           tagName: v__VERSION__
-          releaseName: "TTT v__VERSION__"
+          releaseName: "AI Nav v__VERSION__"
           releaseBody: "More new features are now supported."
           # tauriScript: bun tauri
           args: --target ${{ matrix.target }}
