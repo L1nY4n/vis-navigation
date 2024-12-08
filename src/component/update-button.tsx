@@ -26,7 +26,6 @@ export const UpdateButton = () => {
   async function checkUpdate() {
     setShowDialog(true);
     const up = await check();
-    console.log(up);
     setUpdate(up);
   }
 
@@ -90,7 +89,7 @@ export const UpdateButton = () => {
               )}
             </div>
             <div className="updata-footer">
-              {updateState == null && (
+              {update?.available && updateState == null && (
                 <button onClick={() => downloadAndInstall()}>下载并安装</button>
               )}
               {updateState == "Finished" && (
