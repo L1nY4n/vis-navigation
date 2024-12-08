@@ -1,0 +1,93 @@
+use anyhow::Result;
+use tauri::menu::Menu;
+use tauri::menu::{MenuItem, PredefinedMenuItem};
+use tauri::tray::TrayIconBuilder;
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
+use tauri::{Emitter, Manager};
+use tauri_plugin_updater::UpdaterExt;
+
+// 1. AI对话：弹出webview,访问 https://aichat3.raisound.com/web/#/chat
+// 2. AIPPT：弹出webview,访问 https://aichat3.raisound.com/web/#/ppt
+// 3. AI绘画：弹出webview,访问 https://aichat3.raisound.com/web/#/draw
+// 4. AI阅读：弹出webview,访问 https://aichat3.raisound.com/web/#/extractorbak
+// 5. 思维导图：弹出webview,访问 https://aichat3.raisound.com/web/#/minds
+// 6. 智能体: 弹出webview,访问 https://aichat3.raisound.com/web/#/agent
+// 7. 检查更新: 检查更新API，判断是否有最新版本程序，如果有，弹出下载按钮窗口；
+// 8. 退出系统
+const TRAY_MENU: [(&str, &str, &str); 6] = [
+    ("chat", "AI对话", "https://aichat3.raisound.com/web/#/chat"),
+    ("ppt", "AIPPT", "https://aichat3.raisound.com/web/#/ppt"),
+    ("draw", "AI绘画", "https://aichat3.raisound.com/web/#/draw"),
+    (
+        "extractorbak",
+        "AI阅读",
+        "https://aichat3.raisound.com/web/#/extractorbak",
+    ),
+    (
+        "minds",
+        "思维导图",
+        "https://aichat3.raisound.com/web/#/minds",
+    ),
+    (
+        "agent",
+        "智能体",
+        "https://aichat3.raisound.com/web/#/agent",
+    ),
+];
+
+pub fn create_tray(app: &mut tauri::App) -> Result<()> {
+    let mut menu = Menu::new(app.app_handle())?;
+
+    for (id, name, _) in TRAY_MENU.iter() {
+        let item = MenuItem::with_id(app, id, name, true, None::<&str>).unwrap();
+        menu.append(&item)?;
+    }
+
+    let update = &MenuItem::with_id(app, "update", "检查更新", true, None::<&str>).unwrap();
+    let quit = &MenuItem::with_id(app, "quit", "退出", true, Some("CmdOrControl+Q")).unwrap();
+    let separator = &PredefinedMenuItem::separator(app).unwrap();
+
+    menu.append(separator)?;
+    menu.append(update)?;
+    menu.append(quit)?;
+
+    let tray_menu = TrayIconBuilder::with_id("tray")
+        .menu(&menu)
+        .menu_on_left_click(false)
+        .icon(app.default_window_icon().unwrap().clone())
+        .build(app)?;
+
+    let app_clone = app.app_handle().clone();
+    tray_menu.on_tray_icon_event(move |tray, event| match event {
+        TrayIconEvent::Click {
+            button: MouseButton::Left,
+            button_state: MouseButtonState::Up,
+            ..
+        } => {
+            let window = app_clone.get_webview_window("main").unwrap();
+            window.show().unwrap();
+        }
+        _ => {}
+    });
+
+    tray_menu.on_menu_event(move |app, event| match event.id.as_ref() {
+        "quit" => {
+            app.exit(0);
+        }
+        "update" => {
+            let updater = app.updater().unwrap();
+    
+        }
+        m => {
+            let _ = app.get_webview_window("main").unwrap().show();
+            TRAY_MENU
+                .iter()
+                .find(|(id, _, _)| *id == m)
+                .map(|(_, name, url)| {
+                    app.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
+                });
+        }
+    });
+
+    Ok(())
+}

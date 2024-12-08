@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "notes": "v1.0.0",
+  "platforms": {
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSWSsxL3JDS0VvMjJzT08xTEVyRVlmcEhDVEoyL3lrUWo0RUVFeGFkeDNPS2tQNXRLT3NYYW5tTXpnZWNVV0QrQmFsOW80RzRIc1JjYVhnOEUzaUpiVmFlWmdFQnRiTGdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzMzNTgwMTY0CWZpbGU6YWktbmF2LmFwcC50YXIuZ3oKenpvRE43MXRtemdIOFBsOGkzSXo1SzZNNzJqb21CTDRHZjUzV2JhOVBFWTZGTmxFWWNscDhoaitaelAvT2YxamhYZlh4ZE5vYjE2MFEvK2w4Wi9HREE9PQo=",
+      "url": "https://github.com/L1nY4n/tauri_update_test/releases/download/latest/ai-nav.app.tar.gz"
+    }
+  }
+}
