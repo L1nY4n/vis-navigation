@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
-
-
 import { listen } from "@tauri-apps/api/event";
 
 import "./App.css";

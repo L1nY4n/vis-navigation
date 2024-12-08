@@ -58,7 +58,7 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         .build(app)?;
 
     let app_clone = app.app_handle().clone();
-    tray_menu.on_tray_icon_event(move |tray, event| match event {
+    tray_menu.on_tray_icon_event(move |_tray, event| match event {
         TrayIconEvent::Click {
             button: MouseButton::Left,
             button_state: MouseButtonState::Up,
@@ -70,21 +70,21 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         _ => {}
     });
 
-    tray_menu.on_menu_event(move |app, event| match event.id.as_ref() {
+    tray_menu.on_menu_event(move |h, event| match event.id.as_ref() {
         "quit" => {
-            app.exit(0);
+            h.exit(0);
         }
         "update" => {
-            let updater = app.updater().unwrap();
-    
+            let _ = h.get_webview_window("main").unwrap().show();
+            h.app_handle().emit("CHECK_UPDATE", ()).unwrap();
         }
         m => {
-            let _ = app.get_webview_window("main").unwrap().show();
+            let _ = h.get_webview_window("main").unwrap().show();
             TRAY_MENU
                 .iter()
                 .find(|(id, _, _)| *id == m)
                 .map(|(_, name, url)| {
-                    app.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
+                    h.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
                 });
         }
     });
