@@ -17,7 +17,12 @@ pub fn run() {
 
             create_tray(app)?;
             #[cfg(desktop)]
-            register_shortcuts(app)?;
+            match register_shortcuts(app) {
+                Ok(_) => {}
+                Err(_) => {
+                    println!("Failed to register shortcuts");
+                }
+            }
             Ok(())
         })
         .plugin(tauri_plugin_shell::init())
