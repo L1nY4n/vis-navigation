@@ -3,7 +3,7 @@ use tauri::menu::Menu;
 use tauri::menu::{MenuItem, PredefinedMenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
-use tauri::{window, Emitter, Manager};
+use tauri::{Emitter, Manager};
 
 // 1. AI对话：弹出webview,访问 https://aichat3.raisound.com/web/#/chat
 // 2. AIPPT：弹出webview,访问 https://aichat3.raisound.com/web/#/ppt
@@ -70,34 +70,36 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         .build(app)?;
 
     let app_clone = app.app_handle().clone();
-    tray_menu.on_tray_icon_event(move |_tray, event| match event {
-        TrayIconEvent::Click {
+    tray_menu.on_tray_icon_event(move |_tray, event| if let TrayIconEvent::Click {
             button: MouseButton::Left,
             button_state: MouseButtonState::Up,
             ..
-        } => {
-            println!("{:?}", event);
-            let webview = app_clone.get_webview_window("main").unwrap();
+        } = event {
+        println!("{:?}", event);
+        let webview = app_clone.get_webview_window("main").unwrap();
 
-            // println!(
-            //     "is_visible: {}  is_minimized: {} , is_maximized: {}",
-            //     webview.is_visible().unwrap(),
-            //     webview.is_minimized().unwrap(),
-            //     webview.is_maximized().unwrap(),
+        // println!(
+        //     "is_visible: {}  is_minimized: {} , is_maximized: {}",
+        //     webview.is_visible().unwrap(),
+        //     webview.is_minimized().unwrap(),
+        //     webview.is_maximized().unwrap(),
 
-            // );
+        // );
 
-            if webview.is_visible().unwrap_or(false) {
-                let _ = webview.hide();
-            } else {
-                if webview.is_minimized().unwrap_or(true) {
-                    let _ = webview.unminimize();
-                }
-                let _ = webview.set_focus();
-                let _ = webview.show();
+        if webview.is_visible().unwrap_or(false) {
+            let _ = webview.hide();
+        } else {
+            if webview.is_minimized().unwrap_or(true) {
+                let _ = webview.unminimize();
             }
+
+            #[cfg(target_os = "windows")]  
+            let _ = webview.set_always_on_top(true);
+
+            let _ = webview.set_focus();
+            let _ = webview.show();
+
         }
-        _ => {}
     });
 
     tray_menu.on_menu_event(move |h, event| match event.id.as_ref() {
@@ -110,20 +112,16 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         }
         m => {
             let _ = h.get_webview_window("main").unwrap().show();
-            TRAY_MENU
+            if let Some((_, _name, url,index)) = TRAY_MENU
                 .iter()
-                .find(|(id, _, _,_)| *id == m)
-                .map(|(_, _name, url,index)| {
-                    let _ = h
+                .find(|(id, _, _,_)| *id == m) { let _ = h
                         .get_webview_window("main")
                         .unwrap()
                         .eval(&format!("
                         window.location.replace('{}'); 
                         var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
                         console.log('target--',target);
-                        target.click();", url,index));
-                    //   h.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
-                });
+                        target.click();", url,index)); }
         }
     });
 
