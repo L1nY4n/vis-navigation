@@ -3,8 +3,7 @@ use tauri::menu::Menu;
 use tauri::menu::{MenuItem, PredefinedMenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
-use tauri::{Emitter, Manager};
-use tauri_plugin_updater::UpdaterExt;
+use tauri::{window, Emitter, Manager};
 
 // 1. AI对话：弹出webview,访问 https://aichat3.raisound.com/web/#/chat
 // 2. AIPPT：弹出webview,访问 https://aichat3.raisound.com/web/#/ppt
@@ -49,7 +48,7 @@ const TRAY_MENU: [(&str, &str, &str, u8); 6] = [
 ];
 
 pub fn create_tray(app: &mut tauri::App) -> Result<()> {
-    let mut menu = Menu::new(app.app_handle())?;
+    let menu = Menu::new(app.app_handle())?;
 
     for (id, name, _, _) in TRAY_MENU.iter() {
         let item = MenuItem::with_id(app, id, name, true, None::<&str>).unwrap();
@@ -66,7 +65,7 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
 
     let tray_menu = TrayIconBuilder::with_id("tray")
         .menu(&menu)
-        .menu_on_left_click(false)
+        .show_menu_on_left_click(false)
         .icon(app.default_window_icon().unwrap().clone())
         .build(app)?;
 
@@ -77,8 +76,26 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             button_state: MouseButtonState::Up,
             ..
         } => {
-            let window = app_clone.get_webview_window("main").unwrap();
-            window.show().unwrap();
+            println!("{:?}", event);
+            let webview = app_clone.get_webview_window("main").unwrap();
+
+            // println!(
+            //     "is_visible: {}  is_minimized: {} , is_maximized: {}",
+            //     webview.is_visible().unwrap(),
+            //     webview.is_minimized().unwrap(),
+            //     webview.is_maximized().unwrap(),
+
+            // );
+
+            if webview.is_visible().unwrap_or(false) {
+                let _ = webview.hide();
+            } else {
+                if webview.is_minimized().unwrap_or(true) {
+                    let _ = webview.unminimize();
+                }
+                let _ = webview.set_focus();
+                let _ = webview.show();
+            }
         }
         _ => {}
     });
