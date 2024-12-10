@@ -14,31 +14,44 @@ use tauri_plugin_updater::UpdaterExt;
 // 6. 智能体: 弹出webview,访问 https://aichat3.raisound.com/web/#/agent
 // 7. 检查更新: 检查更新API，判断是否有最新版本程序，如果有，弹出下载按钮窗口；
 // 8. 退出系统
-const TRAY_MENU: [(&str, &str, &str); 6] = [
-    ("chat", "AI对话", "https://aichat3.raisound.com/web/#/chat"),
-    ("ppt", "AIPPT", "https://aichat3.raisound.com/web/#/ppt"),
-    ("draw", "AI绘画", "https://aichat3.raisound.com/web/#/draw"),
+const TRAY_MENU: [(&str, &str, &str, u8); 6] = [
+    (
+        "chat",
+        "AI对话",
+        "https://aichat3.raisound.com/web/#/chat",
+        1,
+    ),
+    ("ppt", "AIPPT", "https://aichat3.raisound.com/web/#/ppt", 3),
+    (
+        "draw",
+        "AI绘画",
+        "https://aichat3.raisound.com/web/#/draw",
+        4,
+    ),
     (
         "extractorbak",
         "AI阅读",
         "https://aichat3.raisound.com/web/#/extractorbak",
+        5,
     ),
     (
         "minds",
         "思维导图",
         "https://aichat3.raisound.com/web/#/minds",
+        6,
     ),
     (
         "agent",
         "智能体",
         "https://aichat3.raisound.com/web/#/agent",
+        7,
     ),
 ];
 
 pub fn create_tray(app: &mut tauri::App) -> Result<()> {
     let mut menu = Menu::new(app.app_handle())?;
 
-    for (id, name, _) in TRAY_MENU.iter() {
+    for (id, name, _, _) in TRAY_MENU.iter() {
         let item = MenuItem::with_id(app, id, name, true, None::<&str>).unwrap();
         menu.append(&item)?;
     }
@@ -82,9 +95,17 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             let _ = h.get_webview_window("main").unwrap().show();
             TRAY_MENU
                 .iter()
-                .find(|(id, _, _)| *id == m)
-                .map(|(_, name, url)| {
-                    h.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
+                .find(|(id, _, _,_)| *id == m)
+                .map(|(_, name, url,index)| {
+                    let _ = h
+                        .get_webview_window("main")
+                        .unwrap()
+                        .eval(&format!("
+                        window.location.replace('{}'); 
+                        var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
+                        console.log('target--',target);
+                        target.click();", url,index));
+                    //   h.app_handle().emit("WEBVIEW_PUSH", [name, url]).unwrap();
                 });
         }
     });
