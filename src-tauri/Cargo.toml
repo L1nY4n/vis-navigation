@@ -37,6 +37,9 @@ tokio = { version = "1.42.0", features = [] }
 tauri-plugin-global-shortcut = "2.2.0"
 tauri-plugin-updater = "2.2.0"
 
+[target.'cfg(target_os = "linux")'.dependencies]
+openssl-sys = {version = "0.9", features = ["vendored"] }
+
 
 [patch.crates-io]
 tauri = { git = "https://github.com/tauri-apps/tauri", branch = "dev" }

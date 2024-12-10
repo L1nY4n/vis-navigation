@@ -58,21 +58,30 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window_handle, event| {
-            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-            
-                {
-                    let window_handle_clone = window_handle.clone();
-                    tauri::async_runtime::spawn(async move {
-                        if window_handle_clone.is_fullscreen().unwrap_or(false) {
-                            window_handle_clone.set_fullscreen(false).unwrap();
-                            // Give a small delay to ensure the full-screen exit operation is completed.
-                            tokio::time::sleep(std::time::Duration::from_millis(900)).await;
-                        }
-                        window_handle_clone.minimize().unwrap();
-                        window_handle_clone.hide().unwrap();
-                    });
+            match event {
+                tauri::WindowEvent::Resized(_) => {
+                    // when minimized window, hide
+                    if window_handle.is_minimized().unwrap_or(false) {
+                        let _ = window_handle.hide();
+                    }
                 }
-                api.prevent_close();
+
+                tauri::WindowEvent::CloseRequested { api, .. } => {
+                    {
+                        let window_handle_clone = window_handle.clone();
+                        tauri::async_runtime::spawn(async move {
+                            if window_handle_clone.is_fullscreen().unwrap_or(false) {
+                                window_handle_clone.set_fullscreen(false).unwrap();
+                                // Give a small delay to ensure the full-screen exit operation is completed.
+                                tokio::time::sleep(std::time::Duration::from_millis(900)).await;
+                            }
+                            window_handle_clone.minimize().unwrap();
+                            window_handle_clone.hide().unwrap();
+                        });
+                    }
+                    api.prevent_close();
+                }
+                _ => {}
             }
         })
         .invoke_handler(tauri::generate_handler![cmds::bring_window_to_top])

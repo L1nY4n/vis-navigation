@@ -3,7 +3,7 @@ use tauri::menu::Menu;
 use tauri::menu::{MenuItem, PredefinedMenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
-use tauri::{Emitter, Manager};
+use tauri::{webview, Emitter, Manager};
 
 // 1. AI对话：弹出webview,访问 https://aichat3.raisound.com/web/#/chat
 // 2. AIPPT：弹出webview,访问 https://aichat3.raisound.com/web/#/ppt
@@ -93,11 +93,11 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                 let _ = webview.unminimize();
             }
 
-            #[cfg(target_os = "windows")]  
-            let _ = webview.set_always_on_top(true);
-
-            let _ = webview.set_focus();
+            // #[cfg(target_os = "windows")]  
+            // let _ = webview.set_always_on_top(true);
             let _ = webview.show();
+            let _ = webview.set_focus();
+     
 
         }
     });
@@ -114,14 +114,22 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             let _ = h.get_webview_window("main").unwrap().show();
             if let Some((_, _name, url,index)) = TRAY_MENU
                 .iter()
-                .find(|(id, _, _,_)| *id == m) { let _ = h
-                        .get_webview_window("main")
-                        .unwrap()
-                        .eval(&format!("
+                .find(|(id, _, _,_)| *id == m) { 
+                    
+                      let wv = h .get_webview_window("main")
+                        .unwrap();
+                       let _ =   wv.eval(&format!("
                         window.location.replace('{}'); 
                         var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
                         console.log('target--',target);
-                        target.click();", url,index)); }
+                        target.click();", url,index)); 
+                        if !wv.is_focused().unwrap_or(false) {
+                            let _ = wv.set_focus();
+                        }
+                    }
+                    
+                
+
         }
     });
 
