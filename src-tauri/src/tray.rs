@@ -113,7 +113,7 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             TRAY_MENU
                 .iter()
                 .find(|(id, _, _,_)| *id == m)
-                .map(|(_, name, url,index)| {
+                .map(|(_, _name, url,index)| {
                     let _ = h
                         .get_webview_window("main")
                         .unwrap()
