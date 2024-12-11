@@ -125,6 +125,11 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                         var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
                         console.log('target--',target);
                         target.click();", url,index)); 
+
+                        if wv.is_minimized().unwrap_or(true) {
+                            let _ = wv.unminimize();
+                        }
+
                         if !wv.is_focused().unwrap_or(false) {
                             let _ = wv.set_focus();
                         }
