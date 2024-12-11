@@ -87,14 +87,14 @@ jobs:
         run: bun i # change this to npm, pnpm or bun depending on which one you use.
 
       - name: Tauri build
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v0.5.16
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
           tagName: v__VERSION__
-          releaseName: "AI Nav v__VERSION__"
+          releaseName: "AI-Nav v__VERSION__"
           releaseBody: "More new features are now supported."
           # tauriScript: bun tauri
           args: ${{ matrix.args }}
