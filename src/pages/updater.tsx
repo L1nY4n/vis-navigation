@@ -57,14 +57,14 @@ export const Updater = () => {
 
   return (
     <div className="update-dialog">
-      <div className="update-title">当前版本: {currentVersion}</div>
+      <div className="current-version">当前版本: {currentVersion}</div>
       <div className="update-body">
         {update && update.available ? (
           <div>
-            <div>
+            <div  className="new-version">
               新版本: {update.currentVersion} ➤ {update.version}
             </div>
-            <div>--{update.body}</div>
+            <p className="update-content">{update.body}</p>
             {(updateState === "Progress" || updateState === "Finished") && (
               <div>
                 {" "}

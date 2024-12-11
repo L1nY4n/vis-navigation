@@ -85,25 +85,34 @@ button {
   outline: none;
 }
 
-#greet-input {
-  margin-right: 5px;
-}
+
 
 .update-dialog{
   width: 100%;
   height: 100%;
 
+  font-size:  14px
 }
 
-.update-dialog .update-box .update-title {
-  height: 28px;
-  line-height: 28px;
-
-   border-bottom: solid 1px #f6f6f6;
+.update-dialog .current-version {
+  padding: 2px;
+  font-weight: bold;
 }
 
-.update-dialog .update-box .update-body{
+.update-dialog  .update-body{
+  padding: 8px;
   font-size: 12px;
+}
+
+.update-dialog  .new-version {
+  color: green;
+  border-bottom: 1px dashed green;
+}
+
+.update-dialog .update-body .update-content{
+  color: #333;
+  margin-top: 4px;
+  border-bottom: 1px dashed green;
 }
 
 .update-footer{

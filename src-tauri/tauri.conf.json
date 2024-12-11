@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "ai-nav",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "identifier": "com.ai-nav.app",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -24,7 +24,6 @@
         "height": 200,
         "url": "/updater",
         "visible": false
- 
       },
       {
         "title": "退出系统",
@@ -36,11 +35,10 @@
         "url": "/quit",
         "visible": false,
         "resizable": false,
-      "devtools": false,
+        "devtools": false,
         "alwaysOnTop": true,
         "minimizable": false,
         "maximizable": false
-       
       }
     ],
 
