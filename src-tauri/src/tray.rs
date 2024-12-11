@@ -104,11 +104,13 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
 
     tray_menu.on_menu_event(move |h, event| match event.id.as_ref() {
         "quit" => {
-            h.exit(0);
+            let _ = h.get_webview_window("quit").unwrap().show();
+         
         }
         "update" => {
-            let _ = h.get_webview_window("main").unwrap().show();
-            h.app_handle().emit("CHECK_UPDATE", ()).unwrap();
+            let webview = h.get_webview_window("update").unwrap();
+            let _ = webview .show();
+            let _ = webview .set_focus();
         }
         m => {
             let _ = h.get_webview_window("main").unwrap().show();
@@ -127,9 +129,6 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                             let _ = wv.set_focus();
                         }
                     }
-                    
-                
-
         }
     });
 

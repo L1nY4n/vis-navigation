@@ -14,8 +14,8 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-            #[cfg(target_os = "macos")]
-            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+            // #[cfg(target_os = "macos")]
+            // app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             create_tray(app)?;
             #[cfg(desktop)]
@@ -84,7 +84,7 @@ pub fn run() {
                 _ => {}
             }
         })
-        .invoke_handler(tauri::generate_handler![cmds::bring_window_to_top])
+        .invoke_handler(tauri::generate_handler![cmds::bring_window_to_top, cmds::check_update])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
