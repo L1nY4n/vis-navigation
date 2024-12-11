@@ -23,6 +23,10 @@
         "width": 400,
         "height": 200,
         "url": "/updater",
+        "alwaysOnTop": true,
+        "minimizable": false,
+        "devtools": false,
+        
         "visible": false
       },
       {
