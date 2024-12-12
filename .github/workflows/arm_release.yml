@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     strategy:
       matrix:
         arch: [aarch64, armv7l]
@@ -68,24 +67,20 @@ jobs:
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Get app version
-        run: echo "APP_VERSION=$(jq -r .version src-tauri/tauri.conf.json)" >> $GITHUB_ENV
-
-      # TODO: Combine this with the basic workflow and upload the files to the Release.
-      - name: Upload deb bundle
-        uses: actions/upload-artifact@v3
+      - name: Tauri build
+        uses: tauri-apps/tauri-action@v0.5.16
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          name: Debian Bundle
-          path: ${{ github.workspace }}/src-tauri/target/release/bundle/deb/ai-nav_${{ env.APP_VERSION }}_${{ matrix.deb }}.deb
+          tagName: v__VERSION__
+          releaseName: "AI-Nav v__VERSION__"
+          releaseBody: "More new features are now supported."
 
-      - name: Upload rpm bundle
-        uses: actions/upload-artifact@v3
-        with:
-          name: RPM Bundle
-          path: ${{ github.workspace }}/src-tauri/target/release/bundle/rpm/ai-nav-${{ env.APP_VERSION }}-1.${{ matrix.rpm }}.rpm
 
-      - name: Upload appimage bundle
-        uses: actions/upload-artifact@v3
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: AppImage Bundle
-          path: ${{ github.workspace }}/src-tauri/target/release/bundle/appimage/ai-nav_${{ env.APP_VERSION }}_${{ matrix.appimage }}.AppImage
+          name: arm-artifacts
+          path: src-tauri/target/release/bundle/**
