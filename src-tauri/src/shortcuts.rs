@@ -18,10 +18,10 @@ pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
 
         #[cfg(target_os = "macos")]
 
-        app.global_shortcut().register("Command+Option+F12")?;
+        app.global_shortcut().register("Shift+Option+0")?;
 
         #[cfg(windows)]
-        app.global_shortcut().register("Ctrl+Alt+F12")?;
+        app.global_shortcut().register("Ctrl+Alt+0")?;
         
 
         Ok(())
