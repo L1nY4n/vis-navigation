@@ -74,6 +74,8 @@ jobs:
       - name: Tauri build
         uses: tauri-apps/tauri-action@v0.5.16
         env:
+          PKG_CONFIG_PATH:  ${{ matrix.arch == 'armv7l' && '/usr/lib/arm-linux-gnueabihf/pkgconfig' || '/usr/lib/aarch64-linux-gnu/pkgconfig'}}
+          PKG_CONFIG_SYSROOT_DIR: ${{ matrix.arch == 'armv7l' && '/usr/arm-linux-gnueabihf/' || '/usr/aarch64-linux-gnu/'}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
