@@ -14,15 +14,16 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-            // #[cfg(target_os = "macos")]
-            // app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+
+            //  #[cfg(target_os = "macos")]
+            //  app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             create_tray(app)?;
             #[cfg(desktop)]
             match register_shortcuts(app) {
                 Ok(_) => {}
-                Err(_) => {
-                    println!("Failed to register shortcuts");
+                Err(err) => {
+                    println!("Failed to register shortcuts {}", err);
                 }
             }
 

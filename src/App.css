@@ -16,6 +16,7 @@
 
 body {
   margin: 0;
+  padding: 0;
 }
 #container {
   margin: 0;
@@ -23,26 +24,28 @@ body {
   display: grid;
   grid-template-rows: 1fr auto;
 }
-#container > #frame-container{
+#container > #frame-container {
+  position: relative;
   width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-#container > #frame-container > iframe{
+#container > #frame-container > iframe {
+  height: 100%;
+  width: 100%;
   border: none;
   outline: none;
-
- }
-
- 
-#container > #menu-container.fullscreen{
-  height: 0;
 }
 
-
-#container > #menu-container{
+#container > #menu-container {
+  overflow: hidden;
+  box-sizing: border-box;
   height: 64px;
 }
-
+#container > #menu-container.fullscreen {
+  height: 0;
+}
 
 #container > #menu-container {
   display: flex;
@@ -85,13 +88,11 @@ button {
   outline: none;
 }
 
-
-
-.update-dialog{
+.update-dialog {
   width: 100%;
   height: 100%;
 
-  font-size:  14px
+  font-size: 14px;
 }
 
 .update-dialog .current-version {
@@ -99,23 +100,23 @@ button {
   font-weight: bold;
 }
 
-.update-dialog  .update-body{
+.update-dialog .update-body {
   padding: 8px;
   font-size: 12px;
 }
 
-.update-dialog  .new-version {
+.update-dialog .new-version {
   color: green;
   border-bottom: 1px dashed green;
 }
 
-.update-dialog .update-body .update-content{
+.update-dialog .update-body .update-content {
   color: #333;
   margin-top: 4px;
   border-bottom: 1px dashed green;
 }
 
-.update-footer{
+.update-footer {
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -123,7 +124,6 @@ button {
 
   gap: 6px;
 }
-
 
 .quit_confirm {
   height: 100%;

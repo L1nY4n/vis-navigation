@@ -1,6 +1,7 @@
 use anyhow::Result;
-use tauri::{AppHandle, Emitter, Manager as _};
-
+use tauri::{AppHandle, Manager as _};
+ 
+ const URL: &str = "https://aichat3.raisound.com/web/#/agent";
 pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
     {
         use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
@@ -17,28 +18,31 @@ pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
         )?;
 
         #[cfg(target_os = "macos")]
-
         app.global_shortcut().register("Shift+Option+0")?;
 
         #[cfg(windows)]
         app.global_shortcut().register("Ctrl+Alt+0")?;
-        
 
         Ok(())
     }
 }
 
 fn open_webview(handle: &AppHandle) {
-    let window = handle.get_webview_window("main").unwrap();
+    let wv = handle.get_webview_window("main").unwrap();
+    let _ = wv.show();
+    let home = URL;
+    let _ =   wv.eval(&format!("
+                        (!window.location.href === '{}') && window.location.replace('{}'); 
+                                var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
+                                 target.click();
+                        
+                      ",home,home,0));
 
-    // Check if the window is already open or visible
-    if !window.is_visible().unwrap() {
-        window.show().unwrap();
+    if wv.is_minimized().unwrap_or(true) {
+        let _ = wv.unminimize();
     }
-    handle
-        .emit(
-            "WEBVIEW_PUSH",
-            ["AI聚合平台", "https://aichat3.raisound.com/web/"],
-        )
-        .unwrap();
+
+    if !wv.is_focused().unwrap_or(false) {
+        let _ = wv.set_focus();
+    }
 }

@@ -3,49 +3,43 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 
-
 export const Ad = () => {
   const [fullscreen, setFullscreen] = useState(false);
-  //const [url, setUrl] = useState("https://aichat3.raisound.com/web/#/agent");
-  const [url, setUrl] = useState("https://aichat3.raisound.com/web/#/agent");
+  // 实际是个广告图片
+  const AD_URL = "https://aichat3.raisound.com/web/#/agent";
   let avoidExtraCall = false;
 
   useEffect(() => {
     if (!avoidExtraCall) {
       avoidExtraCall = true;
-      console.log("run");
-      listen("WEBVIEW_PUSH", ({ payload }) => {
-        const [name, url] = payload as [string, string];
-
-        getCurrentWindow().setTitle(name);
-        getCurrentWindow().show();
-        setUrl(url);
+      getCurrentWindow().center;
+      listen("FULLSCREEN", () => {
         setFullscreen(true);
-        bring_window_to_top();
       });
     }
   }, []);
 
-  async function bring_window_to_top() {
-    await invoke("bring_window_to_top");
-  }
+  // async function bring_window_to_top() {
+  //   await invoke("bring_window_to_top");
+  // }
 
   async function checkUpdate() {
-    console.log("check update");
     await invoke("check_update");
   }
 
   async function minimize() {
-    await getCurrentWindow().minimize();
+    setFullscreen(true);
+    await getCurrentWindow().hide();
   }
 
   async function quit() {
+    setFullscreen(true);
     await getCurrentWindow().hide();
   }
   return (
     <main id="container">
       <div id="frame-container">
-        <iframe src={url} width="100%" height="100%" key={url} />
+        <iframe src={AD_URL} key={AD_URL} />
       </div>
       <div id="menu-container" className={fullscreen ? "fullscreen" : ""}>
         <div id="button-container">

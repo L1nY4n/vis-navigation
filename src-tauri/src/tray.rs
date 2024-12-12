@@ -3,7 +3,7 @@ use tauri::menu::Menu;
 use tauri::menu::{MenuItem, PredefinedMenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
-use tauri::{webview, Emitter, Manager};
+use tauri::{Emitter, Manager};
 
 // 1. AI对话：弹出webview,访问 https://aichat3.raisound.com/web/#/chat
 // 2. AIPPT：弹出webview,访问 https://aichat3.raisound.com/web/#/ppt
@@ -75,26 +75,15 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             button_state: MouseButtonState::Up,
             ..
         } = event {
-        println!("{:?}", event);
+
         let webview = app_clone.get_webview_window("main").unwrap();
-
-        // println!(
-        //     "is_visible: {}  is_minimized: {} , is_maximized: {}",
-        //     webview.is_visible().unwrap(),
-        //     webview.is_minimized().unwrap(),
-        //     webview.is_maximized().unwrap(),
-
-        // );
-
+        let _ = webview.emit("FULLSCREEN", [0]);
         if webview.is_visible().unwrap_or(false) {
             let _ = webview.hide();
         } else {
             if webview.is_minimized().unwrap_or(true) {
                 let _ = webview.unminimize();
             }
-
-            // #[cfg(target_os = "windows")]  
-            // let _ = webview.set_always_on_top(true);
             let _ = webview.show();
             let _ = webview.set_focus();
      

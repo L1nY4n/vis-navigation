@@ -38,15 +38,9 @@ impl Handle {
         window
     }
 
-    pub fn refresh_clash() {
-        if let Some(window) = Self::global().get_window() {
-            println!("refresh_clash");
-        }
-    }
-
-    pub fn refresh_verge() {
-        if let Some(window) = Self::global().get_window() {
-            println!("refresh_verge");
+    pub fn refresh() {
+        if let Some(_window) = Self::global().get_window() {
+            println!("refresh");
         }
     }
 
@@ -57,15 +51,14 @@ impl Handle {
         }
     }
 
-    pub fn notice_message<S: Into<String>, M: Into<String>>(status: S, msg: M) {
-        if let Some(window) = Self::global().get_window() {
+    pub fn notice_message<S: Into<String>, M: Into<String>>(_status: S, _msg: M) {
+        if let Some(_window) = Self::global().get_window() {
             println!("notice_message");
         }
     }
 
     /// update the system tray state
     pub fn update_systray_part() -> Result<()> {
-        //  Tray::update_part()?;
         Ok(())
     }
 
