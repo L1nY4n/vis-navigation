@@ -1,7 +1,7 @@
 use anyhow::Result;
 use tauri::{AppHandle, Manager as _};
- 
- const URL: &str = "https://aichat3.raisound.com/web/#/agent";
+
+const URL: &str = "https://aichat3.raisound.com/web/#/agent";
 pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
     {
         use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
