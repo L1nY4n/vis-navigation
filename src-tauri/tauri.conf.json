@@ -26,7 +26,7 @@
         "alwaysOnTop": true,
         "minimizable": false,
         "devtools": false,
-        
+        "center": true,
         "visible": false
       },
       {
@@ -42,7 +42,8 @@
         "devtools": false,
         "alwaysOnTop": true,
         "minimizable": false,
-        "maximizable": false
+        "maximizable": false,
+        "center": true
       }
     ],
 
