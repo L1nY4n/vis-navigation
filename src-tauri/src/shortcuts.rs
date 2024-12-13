@@ -18,10 +18,10 @@ pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
         )?;
 
         #[cfg(target_os = "macos")]
-        app.global_shortcut().register("Shift+Option+0")?;
+        app.global_shortcut().register("Shift+Command+0")?;
 
         #[cfg(windows)]
-        app.global_shortcut().register("Ctrl+Alt+0")?;
+        app.global_shortcut().register("Shift+Alt+0")?;
 
         Ok(())
     }
@@ -35,11 +35,16 @@ fn open_webview(handle: &AppHandle) {
         let _ = webview.show();
     }
 
-    if webview.is_minimized().unwrap() {
-        let _ = webview.unminimize();
+    if !webview.is_visible().unwrap() {
+        let _ = webview.show();
     }
 
-    let _ = webview.center();
+    if webview.is_minimized().unwrap() {
+        let _ = webview.unminimize();
+        let _ = webview.center();
+    }
+
+
     let _ = webview.set_focus();
 
     let home = URL;
