@@ -40,13 +40,15 @@ fn open_webview(handle: &AppHandle) {
         let _ = webview.center();
     }
 
-
     let _ = webview.set_focus();
 
     let home = URL;
-    let _ =   webview.eval(&format!("
+    let _ = webview.eval(&format!(
+        "
     window.location.replace('{}'); 
     var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
     console.log('target--',target);
-    target.click();", home,0)); 
+    target.click();",
+        home, 0
+    ));
 }

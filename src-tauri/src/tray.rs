@@ -70,52 +70,50 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         .build(app)?;
 
     let app_clone = app.app_handle().clone();
-    tray_menu.on_tray_icon_event(move |_tray, event| if let TrayIconEvent::Click {
+    tray_menu.on_tray_icon_event(move |_tray, event| {
+        if let TrayIconEvent::Click {
             button: MouseButton::Left,
             button_state: MouseButtonState::Up,
             ..
-        } = event {
+        } = event
+        {
+            let webview = app_clone.get_webview_window("main").unwrap();
+            let _ = webview.emit("FULLSCREEN", [0]);
+            if webview.is_visible().unwrap() {
+                let webview_clone = webview.clone();
+                #[cfg(target_os = "macos")]
+                {
+                    tauri::async_runtime::spawn(async move {
+                        if !webview_clone.is_minimized().unwrap() {
+                            webview_clone.minimize().unwrap();
+                            tokio::time::sleep(std::time::Duration::from_millis(400)).await;
+                        }
+                        let _ = webview.hide();
+                    });
+                }
+                #[cfg(not(target_os = "macos"))]
+                {
+                    let _ = webview.minimize();
+                    let _ = webview.hide();
+                }
+            } else {
+                // show
+                // println!("show is_visible = {} is_minimized = {} " ,
+                // webview.is_visible().unwrap(),
+                //  webview.is_minimized().unwrap(),
+                // );
 
-        let webview = app_clone.get_webview_window("main").unwrap();
-        let _ = webview.emit("FULLSCREEN", [0]);
-        if webview.is_visible().unwrap() {  
-
-            let webview_clone = webview.clone();
-            #[cfg(target_os = "macos")]
-            {
-             
-                tauri::async_runtime::spawn(async move {
-                    if !webview_clone.is_minimized().unwrap() {
-                        webview_clone.minimize().unwrap();
-                        tokio::time::sleep(std::time::Duration::from_millis(400)).await;
-                    }
-                    let _ =   webview.hide();
-                });
-            }
-            #[cfg(not(target_os = "macos"))]
-            {
-                let _ = webview.minimize();
-                let _ = webview.hide();
-            }
-     
-         
-        } else {
-            // show 
-            println!("show is_visible = {} is_minimized = {} " , 
-            webview.is_visible().unwrap(),
-             webview.is_minimized().unwrap(), 
-            );
-
-            #[cfg(not(target_os = "macos"))]
-            {
-                let _ = webview.show();
-            }
+                #[cfg(not(target_os = "macos"))]
+                {
+                    let _ = webview.show();
+                }
 
                 if webview.is_minimized().unwrap() {
                     let _ = webview.unminimize();
                 }
 
-            let _ = webview.set_focus();
+                let _ = webview.set_focus();
+            }
         }
     });
 
