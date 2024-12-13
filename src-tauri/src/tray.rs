@@ -130,7 +130,11 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             let _ = webview .set_focus();
         }
         m => {
-            let _ = h.get_webview_window("main").unwrap().show();
+            #[cfg(not(target_os = "macos"))]
+            {
+                let _ = h.get_webview_window("main").unwrap().show();
+            }
+       
             if let Some((_, _name, url,index)) = TRAY_MENU
                 .iter()
                 .find(|(id, _, _,_)| *id == m) { 
