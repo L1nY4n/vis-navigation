@@ -28,21 +28,25 @@ pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
 }
 
 fn open_webview(handle: &AppHandle) {
-    let wv = handle.get_webview_window("main").unwrap();
-    let _ = wv.show();
+    let webview = handle.get_webview_window("main").unwrap();
+
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = webview.show();
+    }
+
+    if webview.is_minimized().unwrap() {
+        let _ = webview.unminimize();
+    }
+
+    let _ = webview.center();
+    let _ = webview.set_focus();
+
     let home = URL;
-    let _ =   wv.eval(&format!("
+    let _ =   webview.eval(&format!("
                         (!window.location.href === '{}') && window.location.replace('{}'); 
                                 var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
                                  target.click();
                         
                       ",home,home,0));
-
-    if wv.is_minimized().unwrap_or(true) {
-        let _ = wv.unminimize();
-    }
-
-    if !wv.is_focused().unwrap_or(false) {
-        let _ = wv.set_focus();
-    }
 }

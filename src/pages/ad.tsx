@@ -13,6 +13,7 @@ export const Ad = () => {
     if (!avoidExtraCall) {
       avoidExtraCall = true;
       getCurrentWindow().center;
+      getCurrentWindow().setFocus();
       listen("FULLSCREEN", () => {
         setFullscreen(true);
       });

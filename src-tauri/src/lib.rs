@@ -14,8 +14,8 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-             #[cfg(target_os = "macos")]
-             app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+            #[cfg(target_os = "macos")]
+            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
 
             create_tray(app)?;
             #[cfg(desktop)]
@@ -60,10 +60,6 @@ pub fn run() {
         .on_window_event(|window_handle, event| {
             match event {
                 tauri::WindowEvent::Resized(_) => {
-                    println!(
-                        "resized  is_minimized{} ",
-                        window_handle.is_minimized().unwrap_or(false)
-                    );
                     // when minimized window, hide
                     #[cfg(not(target_os = "macos"))]
                     if window_handle.is_minimized().unwrap_or(false) {
@@ -78,10 +74,7 @@ pub fn run() {
                         window_handle.minimize().unwrap();
                     }
 
-               
-
                     let _ = window_handle.hide();
-
                 }
                 _ => {}
             }
