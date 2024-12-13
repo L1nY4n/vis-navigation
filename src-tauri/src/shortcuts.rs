@@ -44,9 +44,8 @@ fn open_webview(handle: &AppHandle) {
 
     let home = URL;
     let _ =   webview.eval(&format!("
-                        (!window.location.href === '{}') && window.location.replace('{}'); 
-                                var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
-                                 target.click();
-                        
-                      ",home,home,0));
+    window.location.replace('{}'); 
+    var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
+    console.log('target--',target);
+    target.click();", home,0)); 
 }
