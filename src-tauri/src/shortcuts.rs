@@ -21,7 +21,7 @@ pub fn register_shortcuts(app: &mut tauri::App) -> Result<()> {
         app.global_shortcut().register("Shift+Command+0")?;
 
         #[cfg(windows)]
-        app.global_shortcut().register("Shift+Alt+0")?;
+        app.global_shortcut().register("Shift+Ctr+0")?;
 
         Ok(())
     }
@@ -32,10 +32,6 @@ fn open_webview(handle: &AppHandle) {
 
     #[cfg(not(target_os = "macos"))]
     {
-        let _ = webview.show();
-    }
-
-    if !webview.is_visible().unwrap() {
         let _ = webview.show();
     }
 
