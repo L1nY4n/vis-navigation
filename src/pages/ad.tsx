@@ -20,9 +20,6 @@ export const Ad = () => {
     }
   }, []);
 
-  // async function bring_window_to_top() {
-  //   await invoke("bring_window_to_top");
-  // }
 
   async function checkUpdate() {
     await invoke("check_update");

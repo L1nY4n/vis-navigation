@@ -31,17 +31,3 @@
 
 **系统栏图标**
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/79c0215a-dec4-4d8c-a569-cd1dd277e8ba/0f692fe5-748a-4327-a006-28610a637d32/image.png)
-
-**右键菜单**
-
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/79c0215a-dec4-4d8c-a569-cd1dd277e8ba/7c168a08-9419-4425-9c65-7b7b3579aebe/image.png)
-
-弹出webview示意图，需要保留标题栏和状态栏，窗口默认最大化
-
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/79c0215a-dec4-4d8c-a569-cd1dd277e8ba/5b7cdf87-f765-4f77-988c-bd3c99e0aacc/image.png)
-
-响应键盘组合快捷键，打开webview，访问[https://aichat3.raisound.com/web/](https://aichat3.raisound.com/web/#/chat)
-快捷键设定：
-windows：win+alt+F12 
-Mac：command+option+F12

@@ -11,11 +11,11 @@ use tray::create_tray;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_single_instance::init(|app, _args,_cwd|{
-            let _ = app.get_webview_window("main")
-            .expect("no main window")
-            .set_focus();
-
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            let _ = app
+                .get_webview_window("main")
+                .expect("no main window")
+                .set_focus();
         }))
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
@@ -32,35 +32,6 @@ pub fn run() {
                     println!("Failed to register shortcuts {}", err);
                 }
             }
-
-            // let config = app.config();
-            // let data_dir = app
-            //     .path()
-            //     .app_data_dir()
-            //     .unwrap()
-            //     .join(config.product_name.clone().unwrap());
-            // if !data_dir.exists() {
-            //     std::fs::create_dir_all(&data_dir).unwrap_or_else(|e| {
-            //         println!("Can't create dir {} {:?}", data_dir.display(), e)
-            //     });
-            // }
-
-            // let window = tauri::window::WindowBuilder::new(app, "label")
-            //     .resizable(true)
-            //     .build()?;
-            // let webview_builder = tauri::webview::WebviewBuilder::new(
-            //     "label",
-            //     tauri::WebviewUrl::External(
-            //         Url::parse("https://aichat3.raisound.com/web/#/chat").unwrap(),
-            //     ),
-            // )
-            // .data_directory(data_dir);
-
-            // let webview = window.add_child(
-            //     webview_builder,
-            //     tauri::LogicalPosition::new(0, 0),
-            //     window.inner_size().unwrap(),
-            // );
 
             Ok(())
         })
