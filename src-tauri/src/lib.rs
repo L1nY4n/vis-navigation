@@ -3,6 +3,7 @@ pub mod handle;
 pub mod shortcuts;
 pub mod tray;
 pub mod util;
+pub mod const_def;
 
 use shortcuts::register_shortcuts;
 use tauri::Manager;

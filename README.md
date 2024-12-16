@@ -88,7 +88,8 @@ bun tauri build
 │    │   ├── main.rs                   -------  rust 工程入口
 │    │   ├── shortcuts.rs           -------  快捷键注册
 │    │   ├── tray.rs                     -------  系统托盘处理
-│    │   └── util.rs                      -------  工具函数
-│    ├── target                          ------- 打包输出文件夹
-│    └── tauri.conf.json            ------- Tauri 的配置文件夹
+│    │   ├── const_def.rs          -------  常量定义,URL定义等
+│    │   └── util.rs                     -------  工具函数
+│    ├── target                         ------- 打包输出文件夹
+│    └── tauri.conf.json           ------- Tauri 的配置文件夹
 ```
