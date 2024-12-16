@@ -37,7 +37,7 @@ export const Ad = () => {
   return (
     <main id="container">
       <div id="frame-container">
-        <iframe src={AD_URL} key={AD_URL} />
+        <iframe src={AD_URL} />
       </div>
       <div id="menu-container" className={fullscreen ? "fullscreen" : ""}>
         <div id="button-container">

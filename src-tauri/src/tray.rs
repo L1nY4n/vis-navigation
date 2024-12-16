@@ -55,11 +55,13 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
         menu.append(&item)?;
     }
 
+    let clean_data = &MenuItem::with_id(app, "clean_data", "清除缓存", true, None::<&str>).unwrap();
     let update = &MenuItem::with_id(app, "update", "检查更新", true, None::<&str>).unwrap();
     let quit = &MenuItem::with_id(app, "quit", "退出", true, Some("CmdOrControl+Q")).unwrap();
     let separator = &PredefinedMenuItem::separator(app).unwrap();
 
     menu.append(separator)?;
+    menu.append(clean_data)?;
     menu.append(update)?;
     menu.append(quit)?;
 
@@ -126,7 +128,11 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             let webview = h.get_webview_window("update").unwrap();
             let _ = webview .show();
             let _ = webview .set_focus();
-        }
+        },
+        "clean_data" => {
+            let webview = h.get_webview_window("main").unwrap();
+            let _ = webview .clear_all_browsing_data();
+        },
         m => {
             #[cfg(not(target_os = "macos"))]
             {
