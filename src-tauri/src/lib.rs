@@ -35,6 +35,7 @@ pub fn run() {
                 }
             }
 
+            util::create_window(app.app_handle())?;
 
             Ok(())
         })

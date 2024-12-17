@@ -2,21 +2,9 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": [
-    "main",
-    "update",
-    "quit"
-  ],
-  "platforms": [
-    "macOS",
-    "windows",
-    "linux"
-  ],
-  "webviews": [
-    "main",
-    "update",
-    "quit"
-  ],
+  "windows": ["main", "update", "quit"],
+  "platforms": ["macOS", "windows", "linux"],
+  "webviews": ["main", "update", "quit"],
   "permissions": [
     "core:default",
     "shell:allow-open",
@@ -25,6 +13,7 @@
     "core:window:allow-set-title",
     "core:window:allow-hide",
     "core:window:allow-set-focus",
+    "core:path:default",
     "global-shortcut:default",
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",

@@ -11,14 +11,7 @@
   },
   "app": {
     "windows": [
-      {
-        "title": "AI聚合平台",
-        "width": 1400,
-        "height": 1000,
-        "devtools": false,
-        "center": true
 
-      },
       {
         "title": "更新",
         "label": "update",

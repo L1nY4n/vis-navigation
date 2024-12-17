@@ -7,7 +7,6 @@ use tauri::{Emitter, Manager};
 
 use crate::const_data::TRAY_MENU;
 
-
 pub fn create_tray(app: &mut tauri::App) -> Result<()> {
     let menu = Menu::new(app.app_handle())?;
 
@@ -60,16 +59,14 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                     let _ = webview.hide();
                 }
             } else {
-
-
-               #[cfg(not(target_os = "macos"))]
+                #[cfg(not(target_os = "macos"))]
                 {
                     let _ = webview.show();
                 }
 
                 if webview.is_minimized().unwrap() {
                     let _ = webview.unminimize();
-                }else {
+                } else {
                     let _ = webview.show();
                 }
 
@@ -107,8 +104,8 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                        let _ =   wv.eval(&format!("
                         window.location.replace('{}'); 
                         var target =  document.querySelectorAll('.sidebar-container .module-list .module-item')[{}];
-                        console.log('target--',target);
-                        target.click();", url,index)); 
+                       target && target.click();
+                       ", url,index)); 
 
                         if wv.is_minimized().unwrap_or(true) {
                             let _ = wv.unminimize();
