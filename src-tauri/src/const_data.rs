@@ -7,13 +7,8 @@
 // 6. 智能体: 弹出webview,访问 https://aichat3.raisound.com/web/#/agent
 // 7. 检查更新: 检查更新API，判断是否有最新版本程序，如果有，弹出下载按钮窗口；
 // 8. 退出系统
-pub const TRAY_MENU: [(&str, &str, &str, u8); 7] = [
-    (
-        "test",
-        "测试",
-        "https://aoc-aichat.raisound.com/click.php",
-        0,
-    ),
+pub const TRAY_MENU: [(&str, &str, &str, u8); 6] = [
+  
     (
         "chat",
         "AI对话",

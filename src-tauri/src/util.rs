@@ -113,27 +113,26 @@ pub fn create_window(app_handle: &tauri::AppHandle) -> anyhow::Result<()> {
     #[cfg(target_os = "linux")]
     {
         let handle = app_handle.clone();
-            let window = tauri::window::WindowBuilder::new(&handle, "main")
-                .title("AI聚合平台")
-                .inner_size(1400.0, 1000.0)
-                .maximizable(true)
-                .center()
-                .transparent(false)
-                .skip_taskbar(true)
-                .build()
-                .unwrap();
-            let webview_builder = tauri::webview::WebviewBuilder::new(
-                "main",
-                tauri::WebviewUrl::App("index.html".into()),
-            )
-            .devtools(false)
-            .auto_resize();
-            let _ = window.add_child(
-                webview_builder,
-                tauri::LogicalPosition::new(0, 0),
-                window.inner_size().unwrap(),
-            );
-        
+        let window = tauri::window::WindowBuilder::new(&handle, "main")
+            .title("AI聚合平台")
+            .inner_size(1400.0, 1000.0)
+            .maximizable(true)
+            .center()
+            .transparent(false)
+            .skip_taskbar(true)
+            .build()
+            .unwrap();
+        let webview_builder = tauri::webview::WebviewBuilder::new(
+            "main",
+            tauri::WebviewUrl::App("index.html".into()),
+        )
+        .devtools(false)
+        .auto_resize();
+        let _ = window.add_child(
+            webview_builder,
+            tauri::LogicalPosition::new(0, 0),
+            window.inner_size().unwrap(),
+        );
     }
 
     Ok(())
