@@ -12,8 +12,6 @@ pub enum MessageType {
 }
 
 pub fn create_window(app_handle: &tauri::AppHandle) -> anyhow::Result<()> {
-    let download_dir = app_handle.path().download_dir().unwrap();
-    println!("download_dir: {}", download_dir.display());
     #[cfg(target_os = "windows")]
     {
         let handle = app_handle.clone();
@@ -63,7 +61,7 @@ pub fn create_window(app_handle: &tauri::AppHandle) -> anyhow::Result<()> {
                         let file_name = url.path().split('/').last().unwrap_or("未命名");
                         let file_name =
                             &urlencoding::decode(file_name).expect("UTF-8").into_owned();
-
+                        let download_dir = handle_clone.path().download_dir().unwrap();
                         println!(
                             "downloading {:#?} to {:#?}",
                             url.as_str(),
@@ -114,25 +112,28 @@ pub fn create_window(app_handle: &tauri::AppHandle) -> anyhow::Result<()> {
 
     #[cfg(target_os = "linux")]
     {
-        let window = tauri::window::WindowBuilder::new(&handle, "main")
-            .title("AI聚合平台")
-            .inner_size(1400.0, 1000.0)
-            .maximizable(true)
-            .center()
-            .transparent(false)
-            .build()
-            .unwrap();
-        let webview_builder = tauri::webview::WebviewBuilder::new(
-            "main",
-            tauri::WebviewUrl::App("index.html".into()),
-        )
-        .devtools(false)
-        .auto_resize();
-        let _ = window.add_child(
-            webview_builder,
-            tauri::LogicalPosition::new(0, 0),
-            window.inner_size().unwrap(),
-        );
+        let handle = app_handle.clone();
+            let window = tauri::window::WindowBuilder::new(&handle, "main")
+                .title("AI聚合平台")
+                .inner_size(1400.0, 1000.0)
+                .maximizable(true)
+                .center()
+                .transparent(false)
+                .skip_taskbar(true)
+                .build()
+                .unwrap();
+            let webview_builder = tauri::webview::WebviewBuilder::new(
+                "main",
+                tauri::WebviewUrl::App("index.html".into()),
+            )
+            .devtools(false)
+            .auto_resize();
+            let _ = window.add_child(
+                webview_builder,
+                tauri::LogicalPosition::new(0, 0),
+                window.inner_size().unwrap(),
+            );
+        
     }
 
     Ok(())
