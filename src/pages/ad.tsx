@@ -26,13 +26,14 @@ export const Ad = () => {
   }
 
   async function minimize() {
-    setFullscreen(true);
-    await getCurrentWindow().hide();
+    await quit();
   }
 
   async function quit() {
     setFullscreen(true);
-    await getCurrentWindow().hide();
+    const w = getCurrentWindow()
+    await w.minimize();
+    await w.hide();
   }
   return (
     <main id="container">

@@ -5,7 +5,7 @@ use tauri::tray::TrayIconBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
 use tauri::{Emitter, Manager};
 
-use crate::const_def::TRAY_MENU;
+use crate::const_data::TRAY_MENU;
 
 
 pub fn create_tray(app: &mut tauri::App) -> Result<()> {
@@ -60,19 +60,17 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
                     let _ = webview.hide();
                 }
             } else {
-                // show
-                // println!("show is_visible = {} is_minimized = {} " ,
-                // webview.is_visible().unwrap(),
-                //  webview.is_minimized().unwrap(),
-                // );
 
-                #[cfg(not(target_os = "macos"))]
+
+               #[cfg(not(target_os = "macos"))]
                 {
                     let _ = webview.show();
                 }
 
                 if webview.is_minimized().unwrap() {
                     let _ = webview.unminimize();
+                }else {
+                    let _ = webview.show();
                 }
 
                 let _ = webview.set_focus();
