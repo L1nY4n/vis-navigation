@@ -1,9 +1,9 @@
 pub mod cmds;
+pub mod const_data;
 pub mod handle;
 pub mod shortcuts;
 pub mod tray;
 pub mod util;
-pub mod const_def;
 
 use shortcuts::register_shortcuts;
 use tauri::Manager;
@@ -12,6 +12,7 @@ use tray::create_tray;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let _ = app
                 .get_webview_window("main")
@@ -33,6 +34,7 @@ pub fn run() {
                     println!("Failed to register shortcuts {}", err);
                 }
             }
+
 
             Ok(())
         })
