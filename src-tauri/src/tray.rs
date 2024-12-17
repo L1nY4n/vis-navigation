@@ -42,9 +42,9 @@ pub fn create_tray(app: &mut tauri::App) -> Result<()> {
             let webview = app_clone.get_webview_window("main").unwrap();
             let _ = webview.emit("FULLSCREEN", [0]);
             if webview.is_visible().unwrap() {
-                let webview_clone = webview.clone();
                 #[cfg(target_os = "macos")]
                 {
+                    let webview_clone = webview.clone();
                     tauri::async_runtime::spawn(async move {
                         if !webview_clone.is_minimized().unwrap() {
                             webview_clone.minimize().unwrap();
